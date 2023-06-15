@@ -26,3 +26,9 @@ coverage
 *.njsproj
 *.sln
 *.sw?
+
+
+env
+settings.py
+__pycache__
+migrations

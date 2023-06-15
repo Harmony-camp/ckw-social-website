@@ -19,11 +19,12 @@
 		</div>
 		<div class="main-right">
 			<div class="p-12 bg-white border border-gray-200 rounded-lg">
-				<form class="space-y-6">
+				<form class="space-y-6" @submit.prevent="submitForm">
 					<div>
 						<label>邮箱账号</label><br />
 						<input
 							type="email"
+							v-model="form.email"
 							placeholder="请输入邮箱地址"
 							class="w-full mt-2 py-4 px-6 border border-gray-200 rounded-lg"
 						/>
@@ -32,10 +33,17 @@
 						<label>密码</label><br />
 						<input
 							type="password"
+							v-model="form.password"
 							placeholder="请输入密码"
 							class="w-full mt-2 py-4 px-6 border border-gray-200 rounded-lg"
 						/>
 					</div>
+
+					<template v-if="errors.length > 0">
+						<div class="bg-red-300 text-white rounded-lg p-6">
+							<p v-for="error in errors" :key="error">{{ error }}</p>
+						</div>
+					</template>
 
 					<div>
 						<button class="py-4 px-6 bg-purple-600 text-white rounded-lg">
@@ -47,3 +55,54 @@
 		</div>
 	</div>
 </template>
+
+<script setup>
+import axios from 'axios'
+import { reactive, ref } from 'vue'
+import { useUserStore } from '@/stores/user'
+import { useRouter } from 'vue-router'
+
+const userStore = useUserStore()
+const router = useRouter()
+
+const form = reactive({
+	email: '',
+	password: '',
+})
+
+const errors = ref([])
+
+async function submitForm() {
+	if (form.email === '') {
+		errors.value.push('您还未填写邮箱地址')
+	}
+
+	if (form.password === '') {
+		errors.value.push('您还未填写密码')
+	}
+	if (errors.value.length === 0) {
+		await axios
+			.post('/api/login/', form)
+			.then((res) => {
+				userStore.setToken(res.data)
+
+				axios.defaults.headers.common['Authorization'] =
+					'Bearer ' + res.data.access
+			})
+			.catch((error) => {
+				console.log('error :>> ', error)
+			})
+
+		await axios
+			.get('/api/me/')
+			.then((res) => {
+				userStore.setUserInfo(res.data)
+
+				router.push('/feed')
+			})
+			.catch((error) => {
+				console.log('error :>> ', error)
+			})
+	}
+}
+</script>

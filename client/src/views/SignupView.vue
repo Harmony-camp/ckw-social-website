@@ -19,12 +19,13 @@
 		</div>
 		<div class="main-right">
 			<div class="p-12 bg-white border border-gray-200 rounded-lg">
-				<form class="space-y-6">
+				<form class="space-y-6" @submit.prevent="submitForm">
 					<div>
 						<label>昵称</label><br />
 						<input
 							type="text"
 							placeholder="请输入昵称"
+							v-model="form.name"
 							class="w-full mt-2 py-4 px-6 border border-gray-200 rounded-lg"
 						/>
 					</div>
@@ -32,6 +33,7 @@
 						<label>邮箱账号</label><br />
 						<input
 							type="email"
+							v-model="form.email"
 							placeholder="请输入邮箱地址"
 							class="w-full mt-2 py-4 px-6 border border-gray-200 rounded-lg"
 						/>
@@ -40,6 +42,7 @@
 						<label>密码</label><br />
 						<input
 							type="password"
+							v-model="form.password1"
 							placeholder="请输入密码"
 							class="w-full mt-2 py-4 px-6 border border-gray-200 rounded-lg"
 						/>
@@ -49,10 +52,17 @@
 						<label>重复密码</label><br />
 						<input
 							type="password"
+							v-model="form.password2"
 							placeholder="请再次输入密码"
 							class="w-full mt-2 py-4 px-6 border border-gray-200 rounded-lg"
 						/>
 					</div>
+
+					<template v-if="errors.length > 0">
+						<div class="bg-red-300 text-white rounded-lg p-6">
+							<p v-for="error in errors" :key="error">{{ error }}</p>
+						</div>
+					</template>
 
 					<div>
 						<button class="py-4 px-6 bg-purple-600 text-white rounded-lg">
@@ -64,3 +74,59 @@
 		</div>
 	</div>
 </template>
+
+<script setup>
+import axios from 'axios'
+import { reactive, ref } from 'vue'
+import { useToastStore } from '@/stores/toast'
+
+const toastStore = useToastStore()
+
+const form = reactive({
+	email: '',
+	name: '',
+	password1: '',
+	password2: '',
+})
+
+const errors = ref([])
+
+function submitForm() {
+	errors.value = []
+
+	if (form.email === '') {
+		errors.value.push('您还未填写邮箱地址')
+	}
+
+	if (form.name === '') {
+		errors.value.push('您还未填写昵称')
+	}
+
+	if (form.password1 === '') {
+		errors.value.push('您还未填写密码')
+	}
+
+	if (form.password1 !== form.password2) {
+		errors.value.push('两次输入密码不一致')
+	}
+
+	if (errors.value.length === 0) {
+		axios
+			.post('/api/signup/', form)
+			.then((res) => {
+				if (res.data.message === 'success') {
+					toastStore.showToast(5000, '该用户注册成功，请登录', 'bg-emerald-500')
+					form.email = ''
+					form.name = ''
+					form.password1 = ''
+					form.password2 = ''
+				} else {
+					toastStore.showToast(5000, '出现了一些错误，请重试', 'bg-red-300')
+				}
+			})
+			.catch((error) => {
+				console.log('error :>> ', error)
+			})
+	}
+}
+</script>

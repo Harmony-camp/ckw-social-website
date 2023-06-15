@@ -6,7 +6,10 @@
 					<a href="#" class="text-xl">ckw-asia</a>
 				</div>
 
-				<div class="menu-center flex space-x-12">
+				<div
+					class="menu-center flex space-x-12"
+					v-if="userStore.user.isAuthenticated"
+				>
 					<a href="#" class="text-purple-700">
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
@@ -77,9 +80,23 @@
 				</div>
 
 				<div class="menu-right">
-					<a href="#">
-						<img src="https://i.pravatar.cc/40?img=70" class="rounded-full" />
-					</a>
+					<template v-if="userStore.user.isAuthenticated">
+						<a href="#">
+							<img src="https://i.pravatar.cc/40?img=70" class="rounded-full" />
+						</a>
+					</template>
+					<template v-else>
+						<router-link
+							to="/login"
+							class="mr-4 py-4 px-6 bg-gray-600 text-white rounded-lg"
+							>登录</router-link
+						>
+						<router-link
+							to="/signup"
+							class="py-4 px-6 bg-purple-600 text-white rounded-lg"
+							>注册</router-link
+						>
+					</template>
 				</div>
 			</div>
 		</div>
@@ -88,6 +105,23 @@
 	<main class="px-8 py-6 bg-gray-100">
 		<router-view></router-view>
 	</main>
+
+	<Toast class="ml-4 text-white rounded-lg" />
 </template>
 
-<style scoped></style>
+<script setup>
+import axios from 'axios'
+import Toast from '@/components/Toast.vue'
+import { useUserStore } from './stores/user'
+
+const userStore = useUserStore()
+
+userStore.initStore()
+const token = userStore.user.access
+
+if (token) {
+	axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
+} else {
+	axios.defaults.headers.common['Authorization'] = ''
+}
+</script>
