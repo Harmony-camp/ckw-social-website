@@ -7,8 +7,30 @@
 					<strong>{{ user.name }}</strong>
 				</p>
 				<div class="mt-6 flex space-x-8 justify-around">
-					<p class="text-xs text-gray-500">100 friends</p>
+					<router-link :to="{ name: 'friends', params: { id: user.id } }">
+						<p class="text-xs text-gray-500">
+							{{ user.friends_count }} friends
+						</p>
+					</router-link>
 					<p class="text-xs text-gray-500">210 posts</p>
+				</div>
+
+				<div class="mt-6">
+					<button
+						v-if="userStore.user.id !== user.id"
+						@click="sendFriendshipRequest"
+						class="inline-block py-3 px-6 bg-purple-600 text-xs text-white rounded-lg"
+					>
+						发送好友请求
+					</button>
+
+					<button
+						v-else
+						@click="logout"
+						class="inline-block py-3 px-6 bg-red-600 text-xs text-white rounded-lg"
+					>
+						登出
+					</button>
 				</div>
 			</div>
 		</div>
@@ -63,16 +85,41 @@ import PeopleYouMayKnow from '../components/PeopleYouMayKnow.vue'
 import Trends from '../components/Trends.vue'
 import FeedItem from '../components/FeedItem.vue'
 import { useUserStore } from '@/stores/user'
-import { useRoute } from 'vue-router'
+import { useToastStore } from '@/stores/toast'
+import { useRoute, useRouter } from 'vue-router'
 import axios from 'axios'
 import { ref, onMounted, watch } from 'vue'
 
 const userStore = useUserStore()
+const toastStore = useToastStore()
 const route = useRoute()
+const router = useRouter()
 
 const posts = ref([])
 const user = ref({})
 const body = ref('')
+
+function sendFriendshipRequest() {
+	axios
+		.post(`/api/friends/${route.params.id}/request/`)
+		.then((res) => {
+			console.log('data :>> ', res.data)
+			// user = response.data.user
+
+			if (res.data == 'request already sent') {
+				toastStore.showToast(
+					5000,
+					'The request has already been sent!',
+					'bg-red-300'
+				)
+			} else {
+				toastStore.showToast(5000, 'The request was sent!', 'bg-emerald-300')
+			}
+		})
+		.catch((error) => {
+			console.log('error :>> ', error)
+		})
+}
 
 function getFeed() {
 	axios
@@ -81,7 +128,6 @@ function getFeed() {
 			console.log('data :>> ', res.data)
 			posts.value = res.data.posts
 			user.value = res.data.user
-			console.log(user.value)
 		})
 		.catch((error) => {
 			console.log('error :>> ', error)
@@ -101,11 +147,17 @@ function submitForm() {
 		})
 }
 
+function logout() {
+	userStore.removeToken()
+
+	router.push('/login')
+}
+
 // 修复个人资料页中路由监听页面内容不刷新的问题
 watch(
-	() => route.params,
+	() => route.params.id,
 	() => {
-		// console.log('..111')
+		console.log('route.params.id :>> ', route.params.id)
 		getFeed()
 	},
 	{
