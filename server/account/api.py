@@ -27,12 +27,10 @@ def signup(request):
       'password2':data.get('password2')
     })
 
-
-
-    # if form.is_valid():
-    #   form.save()
+    if form.is_valid():
+      form.save()
       
-    #   # 发送验证信息至邮箱
-    # else:
-    #   message = 'error'  
+      # 发送验证信息至邮箱
+    else:
+      message = 'error'  
     return JsonResponse({'message': message })

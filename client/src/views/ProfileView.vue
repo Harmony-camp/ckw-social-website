@@ -1,7 +1,23 @@
 <template>
 	<div class="max-w-7xl mx-auto grid grid-cols-4 gap-4">
-		<div class="main-center col-span-3 space-y-4">
-			<div class="bg-white border border-gray-200 rounded-lg">
+		<div class="main-left col-span-1">
+			<div class="p-4 bg-white border border-gray-200 text-center rounded-lg">
+				<img src="https://i.pravatar.cc/300?img=70" class="mb-6 rounded-full" />
+				<p>
+					<strong>{{ user.name }}</strong>
+				</p>
+				<div class="mt-6 flex space-x-8 justify-around">
+					<p class="text-xs text-gray-500">100 friends</p>
+					<p class="text-xs text-gray-500">210 posts</p>
+				</div>
+			</div>
+		</div>
+
+		<div class="main-center col-span-2 space-y-4">
+			<div
+				class="bg-white border border-gray-200 rounded-lg"
+				v-if="userStore.user.id === user.id"
+			>
 				<form @submit.prevent="submitForm" method="post">
 					<div class="p-4">
 						<textarea
@@ -46,18 +62,26 @@
 import PeopleYouMayKnow from '../components/PeopleYouMayKnow.vue'
 import Trends from '../components/Trends.vue'
 import FeedItem from '../components/FeedItem.vue'
+import { useUserStore } from '@/stores/user'
+import { useRoute } from 'vue-router'
 import axios from 'axios'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
+
+const userStore = useUserStore()
+const route = useRoute()
 
 const posts = ref([])
+const user = ref({})
 const body = ref('')
 
-function getfeed() {
+function getFeed() {
 	axios
-		.get('api/posts/')
+		.get(`api/posts/profile/${route.params.id}/`)
 		.then((res) => {
 			console.log('data :>> ', res.data)
-			posts.value = res.data
+			posts.value = res.data.posts
+			user.value = res.data.user
+			console.log(user.value)
 		})
 		.catch((error) => {
 			console.log('error :>> ', error)
@@ -77,7 +101,34 @@ function submitForm() {
 		})
 }
 
+// 修复个人资料页中路由监听页面内容不刷新的问题
+watch(
+	() => route.params,
+	() => {
+		// console.log('..111')
+		getFeed()
+	},
+	{
+		immediate: true,
+		deep: true,
+	}
+)
+
+// watch('$route.params.id', getFeed(), {
+// 	immediate: true,
+// 	deep: true,
+// })
+
+// 在路由跳转之前检查要跳转的name是否与当前页的name相同
+// onBeforeRouteUpdate((to, from, next) => {
+// 	console.log('from >> ', from)
+// 	console.log('to :>> ', to)
+// 	if (from.name === to.name) {
+// 		getFeed()
+// 	}
+// })
+
 onMounted(() => {
-	getfeed()
+	getFeed()
 })
 </script>

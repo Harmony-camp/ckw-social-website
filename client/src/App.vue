@@ -81,9 +81,11 @@
 
 				<div class="menu-right">
 					<template v-if="userStore.user.isAuthenticated">
-						<a href="#">
+						<router-link
+							:to="{ name: 'profile', params: { id: userStore.user.id } }"
+						>
 							<img src="https://i.pravatar.cc/40?img=70" class="rounded-full" />
-						</a>
+						</router-link>
 					</template>
 					<template v-else>
 						<router-link
@@ -112,7 +114,7 @@
 <script setup>
 import axios from 'axios'
 import Toast from '@/components/Toast.vue'
-import { useUserStore } from './stores/user'
+import { useUserStore } from '@/stores/user'
 
 const userStore = useUserStore()
 
