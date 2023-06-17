@@ -6,9 +6,11 @@ import FeedView from '../views/FeedView.vue'
 import MessagesView from '../views/MessagesView.vue'
 import SearchView from '../views/SearchView.vue'
 import ProfileView from '../views/ProfileView.vue'
+import EditProfileView from '../views/EditProfileView.vue'
 import PostView from '../views/PostView.vue'
 import FriendsView from '../views/FriendsView.vue'
 import ChatView from '../views/ChatView.vue'
+import TrendView from '../views/TrendView.vue'
 
 const router = createRouter({
 	history: createWebHistory(import.meta.env.BASE_URL),
@@ -45,6 +47,11 @@ const router = createRouter({
 			// props: (route) => ({ id: route.params.id }),
 		},
 		{
+			path: '/profile/edit',
+			name: 'editprofile',
+			component: EditProfileView,
+		},
+		{
 			path: '/profile/:id/friends',
 			name: 'friends',
 			component: FriendsView,
@@ -53,6 +60,11 @@ const router = createRouter({
 			path: '/:id',
 			name: 'postview',
 			component: PostView,
+		},
+		{
+			path: '/trends/:id',
+			name: 'trendview',
+			component: TrendView,
 		},
 		{
 			path: '/signup',
@@ -67,9 +79,6 @@ const router = createRouter({
 		{
 			path: '/about',
 			name: 'about',
-			// route level code-splitting
-			// this generates a separate chunk (About.[hash].js) for this route
-			// which is lazy-loaded when the route is visited.
 			component: () => import('../views/AboutView.vue'),
 		},
 	],

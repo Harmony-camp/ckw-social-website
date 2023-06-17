@@ -6,13 +6,13 @@
 				<p>
 					<strong>{{ user.name }}</strong>
 				</p>
-				<div class="mt-6 flex space-x-8 justify-around">
+				<div class="mt-6 flex space-x-8 justify-around" v-if="user.id">
 					<router-link :to="{ name: 'friends', params: { id: user.id } }">
 						<p class="text-xs text-gray-500">
 							{{ user.friends_count }} friends
 						</p>
 					</router-link>
-					<p class="text-xs text-gray-500">210 posts</p>
+					<p class="text-xs text-gray-500">{{ user.posts_count }} posts</p>
 				</div>
 
 				<div class="mt-6">
@@ -32,10 +32,18 @@
 						Send direct message
 					</button>
 
+					<router-link
+						v-if="userStore.user.id === user.id"
+						to="/profile/edit"
+						class="inline-block py-3 px-6 bg-purple-600 text-xs text-white rounded-lg"
+					>
+						Edit Profile
+					</router-link>
+
 					<button
-						v-else
+						v-if="userStore.user.id === user.id"
 						@click="logout"
-						class="inline-block py-3 px-6 bg-red-600 text-xs text-white rounded-lg"
+						class="ml-2 inline-block py-3 px-6 bg-red-600 text-xs text-white rounded-lg"
 					>
 						Log out
 					</button>
@@ -104,7 +112,9 @@ const route = useRoute()
 const router = useRouter()
 
 const posts = ref([])
-const user = ref({})
+const user = ref({
+	id: '',
+})
 const body = ref('')
 
 function sendFriendshipRequest() {

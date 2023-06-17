@@ -4,8 +4,8 @@ from rest_framework.response import Response
 from account.models import User
 from account.serializers import UserSerializer
 
-from .models import Post,Like,Comment
-from .serializers import PostSerializer,PostDetailSerializer,CommentSerializer
+from .models import Post,Like,Comment,Trend
+from .serializers import PostSerializer,PostDetailSerializer,CommentSerializer,TrendSerializer
 from .forms import PostForm
 
 @api_view(['GET'])
@@ -18,6 +18,12 @@ def post_list(request):
         user_ids.append(user.id) 
 
     posts = Post.objects.filter(created_by_id__in=list(user_ids))
+
+    trend = request.GET.get('trend','')
+
+    if trend:
+       posts = posts.filter(body__icontains=trend)
+
     serializer = PostSerializer(posts,many=True)
 
     return Response(serializer.data)
@@ -86,5 +92,12 @@ def post_create_comment(request,pk):
     post.save()
 
     serializer = CommentSerializer(comment)
+
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def get_trends(request):
+    trends = Trend.objects.all()
+    serializer = TrendSerializer(trends,many=True)
 
     return Response(serializer.data)

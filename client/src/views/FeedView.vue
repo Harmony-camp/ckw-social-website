@@ -52,9 +52,9 @@ import { ref, onMounted } from 'vue'
 const posts = ref([])
 const body = ref('')
 
-function getfeed() {
+function getFeed() {
 	axios
-		.get('api/posts/')
+		.get('/api/posts/')
 		.then((res) => {
 			console.log('data :>> ', res.data)
 			posts.value = res.data
@@ -78,6 +78,6 @@ function submitForm() {
 }
 
 onMounted(() => {
-	getfeed()
+	getFeed()
 })
 </script>
