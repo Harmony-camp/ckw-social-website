@@ -21,7 +21,15 @@
 						@click="sendFriendshipRequest"
 						class="inline-block py-3 px-6 bg-purple-600 text-xs text-white rounded-lg"
 					>
-						发送好友请求
+						Send friendship request
+					</button>
+
+					<button
+						v-if="userStore.user.id !== user.id"
+						@click="sendDirectMessage"
+						class="inline-block mt-4 py-3 px-6 bg-purple-600 text-xs text-white rounded-lg"
+					>
+						Send direct message
 					</button>
 
 					<button
@@ -29,7 +37,7 @@
 						@click="logout"
 						class="inline-block py-3 px-6 bg-red-600 text-xs text-white rounded-lg"
 					>
-						登出
+						Log out
 					</button>
 				</div>
 			</div>
@@ -121,11 +129,25 @@ function sendFriendshipRequest() {
 		})
 }
 
+function sendDirectMessage() {
+	console.log('messagesend')
+
+	axios
+		.get(`/api/chat/${route.params.id}/get-or-create/`)
+		.then((res) => {
+			console.log('conversation :>> ', res.data)
+			router.push('/chat')
+		})
+		.catch((error) => {
+			console.log('error :>> ', error)
+		})
+}
+
 function getFeed() {
 	axios
 		.get(`api/posts/profile/${route.params.id}/`)
 		.then((res) => {
-			console.log('data :>> ', res.data)
+			console.log('posts :>> ', res.data)
 			posts.value = res.data.posts
 			user.value = res.data.user
 		})
