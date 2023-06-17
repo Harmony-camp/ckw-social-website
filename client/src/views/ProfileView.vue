@@ -144,6 +144,7 @@ function submitForm() {
 		.then((res) => {
 			console.log('data :>> ', res.data)
 			posts.value.unshift(res.data)
+			body.value = ''
 		})
 }
 

@@ -25,6 +25,7 @@
 		<div class="flex space-x-6">
 			<div class="flex items-center space-x-2">
 				<svg
+					@click="likePost(post.id)"
 					xmlns="http://www.w3.org/2000/svg"
 					fill="none"
 					viewBox="0 0 24 24"
@@ -38,7 +39,7 @@
 						d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"
 					/>
 				</svg>
-				<span class="text-gray-500 text-xs">0 喜欢</span>
+				<span class="text-gray-500 text-xs">{{ post.likes_count }} likes</span>
 			</div>
 
 			<div class="flex items-center space-x-2">
@@ -57,7 +58,12 @@
 					/>
 				</svg>
 
-				<span class="text-gray-500 text-xs">0 评论</span>
+				<router-link
+					:to="{ name: 'postview', params: { id: post.id } }"
+					class="text-gray-500 text-xs"
+				>
+					{{ post.comments_count }} comments</router-link
+				>
 			</div>
 		</div>
 
@@ -82,7 +88,25 @@
 
 <script setup>
 // import { onMounted } from 'vue'
+import axios from 'axios'
 const props = defineProps({
 	post: Object,
 })
+
+function likePost(id) {
+	// console.log('likePost :>> ', id)
+
+	axios
+		.post(`/api/posts/${id}/like/`)
+		.then((res) => {
+			// console.log('res.data :>> ', res.data)
+			// console.log('props :>> ', props.post)
+			if (res.data == 'like created') {
+				props.post.likes_count += 1
+			}
+		})
+		.catch((error) => {
+			console.log('error :>> ', error)
+		})
+}
 </script>
