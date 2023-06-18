@@ -114,6 +114,7 @@ function submitForm() {
 		axios
 			.post('/api/signup/', form)
 			.then((res) => {
+				console.log('res :>> ', res.data)
 				if (res.data.message === 'success') {
 					toastStore.showToast(5000, '该用户注册成功，请登录', 'bg-emerald-500')
 					form.email = ''
@@ -121,6 +122,11 @@ function submitForm() {
 					form.password1 = ''
 					form.password2 = ''
 				} else {
+					const data = JSON.parse(res.data.message)
+					for (const key in data) {
+						// console.log(key, data[key][0].message)
+						errors.value.push(data[key][0].message)
+					}
 					toastStore.showToast(5000, '出现了一些错误，请重试', 'bg-red-300')
 				}
 			})

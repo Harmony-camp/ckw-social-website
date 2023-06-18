@@ -160,9 +160,6 @@ function getFeed() {
 			console.log('posts :>> ', res.data)
 			posts.value = res.data.posts
 			user.value = res.data.user
-
-			console.log('avatar :>> ', user.value.avatar)
-			console.log('http://127.0.0.1:8000' + user.value.avatar)
 		})
 		.catch((error) => {
 			console.log('error :>> ', error)
@@ -177,9 +174,10 @@ function submitForm() {
 			body: body.value,
 		})
 		.then((res) => {
-			console.log('data :>> ', res.data)
+			console.log('user submit post :>> ', res.data)
 			posts.value.unshift(res.data)
 			body.value = ''
+			user.value.posts_count += 1
 		})
 }
 

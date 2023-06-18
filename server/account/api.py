@@ -29,19 +29,23 @@ def signup(request):
     message = 'success'
 
     form = SignupForm({
-      'email':data.get('email'),
-      'name':data.get('name'),
-      'password1':data.get('password1'),
-      'password2':data.get('password2')
+        'email':data.get('email'),
+        'name':data.get('name'),
+        'password1':data.get('password1'),
+        'password2':data.get('password2')
     })
 
     if form.is_valid():
-      form.save()
+        form.save()
       
       # 发送验证信息至邮箱
     else:
-      message = 'error'  
-    return JsonResponse({'message': message })
+        # print(form.errors.as_data())
+        # message = list(form.errors)
+        message = form.errors.as_json()
+    print(message)
+
+    return Response({'message': message })
 
 
 @api_view(['GET'])
@@ -69,7 +73,7 @@ def edit_profile(request):
     email = request.data.get('email')
 
     if User.objects.exclude(id=user.id).filter(email=email).exists():
-        return Response('Email already exists')
+        return Response({'message':'Email already exists'})
     else:
         # request.FILES or POST 是django集成後的語法糖
         print(request.POST)
@@ -83,8 +87,9 @@ def edit_profile(request):
 
         if form.is_valid():
             form.save()
+        serializer = UserSerializer(user)
 
-        return Response('information updated')
+        return Response({'message':'information updated','user':serializer.data})
 
 
 @api_view(['POST'])
