@@ -82,12 +82,12 @@ const userStore = useUserStore()
 const form = reactive({
 	email: userStore.user.email,
 	name: userStore.user.name,
+	avatar: userStore.user.avatar,
 })
 const pressImg = ref(null)
-const avatarUrl = ref('')
+const avatarUrl = ref(userStore.user.avatar)
 const errors = ref([])
 const fileInputRef = ref(null)
-const picture = ref(null)
 
 function openFilePicker() {
 	fileInputRef.value.click()
@@ -95,7 +95,6 @@ function openFilePicker() {
 
 function avatarChange(e) {
 	let file = e.target.files[0]
-	picture.value = e.target.files[0]
 	// 预览base64
 	let fr = new FileReader()
 	fr.readAsDataURL(file)
@@ -159,7 +158,7 @@ function submitForm() {
 				},
 			})
 			.then((res) => {
-				if (res.data === 'information updated') {
+				if (res.data.message === 'information updated') {
 					toastStore.showToast(
 						5000,
 						'The information was saved',
@@ -172,13 +171,14 @@ function submitForm() {
 						id: userStore.user.id,
 						name: form.name,
 						email: form.email,
+						avatar: res.data.user.get_avatar,
 					})
 
 					router.back()
 				} else {
 					toastStore.showToast(
 						5000,
-						`${res.data}.Please try again`,
+						`${res.data.message}.Please try again`,
 						'bg-red-300'
 					)
 				}
