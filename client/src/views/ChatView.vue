@@ -10,11 +10,12 @@
 						class="flex items-center justify-between"
 					>
 						<div class="flex items-center space-x-2">
-							<img
-								src="https://i.pravatar.cc/300?img=70"
-								class="w-[40px] rounded-full"
-							/>
 							<template v-for="user in conversation.users" :key="user.id">
+								<img
+									v-if="user.id !== userStore.user.id"
+									:src="user.get_avatar"
+									class="w-[40px] rounded-full"
+								/>
 								<p
 									class="text-xs font-bold"
 									v-if="user.id !== userStore.user.id"
@@ -57,7 +58,7 @@
 							</div>
 							<div class="flex-shrink-0 h-10 w-10 rounded-full bg-gray-300">
 								<img
-									src="https://i.pravatar.cc/300?img=70"
+									:src="message.created_by.get_avatar"
 									class="w-[40px] rounded-full"
 								/>
 							</div>
@@ -66,7 +67,7 @@
 						<div v-else class="flex w-full mt-2 space-x-3 max-w-md">
 							<div class="flex-shrink-0 h-10 w-10 rounded-full bg-gray-300">
 								<img
-									src="https://i.pravatar.cc/300?img=70"
+									:src="message.created_by.get_avatar"
 									class="w-[40px] rounded-full"
 								/>
 							</div>

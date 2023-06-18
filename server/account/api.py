@@ -5,7 +5,9 @@ from rest_framework.response import Response
 
 from .models import User,FriendshipRequest
 from .serializers import UserSerializer,FriendshipRequestSerializer
-from .forms import SignupForm
+from .forms import SignupForm,ProfileForm
+
+import json
 
 
 
@@ -15,6 +17,7 @@ def me(request):
         'id': request.user.id,
         'name': request.user.name,
         'email': request.user.email,
+        'avatar':request.user.get_avatar()
 })
 
 
@@ -68,9 +71,18 @@ def edit_profile(request):
     if User.objects.exclude(id=user.id).filter(email=email).exists():
         return Response('Email already exists')
     else:
-        user.email = email
-        user.name = request.data.get('name')
-        user.save()
+        # request.FILES or POST 是django集成後的語法糖
+        print(request.POST)
+        print(request.FILES)
+
+        form = ProfileForm(request.POST,request.FILES,instance=user)
+        
+        # file = request.data.get('avatar')      
+        # user.name = request.data.get('name')
+        # user.save()
+
+        if form.is_valid():
+            form.save()
 
         return Response('information updated')
 

@@ -15,6 +15,23 @@
 			<div class="p-12 bg-white border border-gray-200 rounded-lg">
 				<form class="space-y-6" @submit.prevent="submitForm">
 					<div>
+						<label>Avatar</label><br />
+						<div class="uploadArea space-y-5">
+							<input
+								ref="fileInputRef"
+								type="file"
+								style="display: none"
+								@change="avatarChange"
+							/>
+							<img
+								@click="openFilePicker"
+								class="rounded-full w-24 h-24"
+								ref="pressImg"
+								:src="avatarUrl"
+							/>
+						</div>
+					</div>
+					<div>
 						<label>Name</label><br />
 						<input
 							type="text"
@@ -66,8 +83,45 @@ const form = reactive({
 	email: userStore.user.email,
 	name: userStore.user.name,
 })
-
+const pressImg = ref(null)
+const avatarUrl = ref('')
 const errors = ref([])
+const fileInputRef = ref(null)
+const picture = ref(null)
+
+function openFilePicker() {
+	fileInputRef.value.click()
+}
+
+function avatarChange(e) {
+	let file = e.target.files[0]
+	picture.value = e.target.files[0]
+	// 预览base64
+	let fr = new FileReader()
+	fr.readAsDataURL(file)
+	fr.onload = function () {
+		avatarUrl.value = fr.result
+		let pressCanvas = document.createElement('canvas')
+		pressCanvas.width = pressImg.value.width
+		pressCanvas.height = pressImg.value.height
+		// 不使用canvas对象转化为blob
+		let ctx = pressCanvas.getContext('2d')
+		// drawImage
+		ctx.drawImage(
+			pressImg.value,
+			0,
+			0,
+			pressImg.value.width,
+			pressImg.value.height
+		)
+	}
+}
+
+// function avatarChange(e) {
+// 	picture.value = e.target.files[0]
+// 	 = URL.createObjectURL(e.target.files[0])
+// 	img.src = img_url
+// }
 
 function submitForm() {
 	errors.value = []
@@ -81,8 +135,29 @@ function submitForm() {
 	}
 
 	if (errors.value.length === 0) {
+		// console.log('picture :>> ', picture.value)
+		console.log('file :>> ', fileInputRef.value.files[0])
+		let formData = new FormData()
+		formData.append('avatar', fileInputRef.value.files[0])
+		formData.append('name', form.name)
+		formData.append('email', form.email)
+		console.log('userProfile :>> ', formData)
+
+		// axios({
+		// 	url: '/api/editprofile/',
+		// 	headers: {
+		// 		'Content-Type': 'multipart/form-data',
+		// 	},
+		// 	method: 'post',
+		// 	data: formData,
+		// })
+
 		axios
-			.post('/api/editprofile/', form)
+			.post('/api/editprofile/', formData, {
+				headers: {
+					'Content-Type': 'multipart/form-data',
+				},
+			})
 			.then((res) => {
 				if (res.data === 'information updated') {
 					toastStore.showToast(

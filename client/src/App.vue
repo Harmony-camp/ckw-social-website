@@ -84,7 +84,7 @@
 						<router-link
 							:to="{ name: 'profile', params: { id: userStore.user.id } }"
 						>
-							<img src="https://i.pravatar.cc/40?img=70" class="rounded-full" />
+							<img :src="userStore.user.avatar" class="w-12 rounded-full" />
 						</router-link>
 					</template>
 					<template v-else>
