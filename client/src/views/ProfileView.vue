@@ -2,7 +2,7 @@
 	<div class="max-w-7xl mx-auto grid grid-cols-4 gap-4">
 		<div class="main-left col-span-1">
 			<div class="p-4 bg-white border border-gray-200 text-center rounded-lg">
-				<img :src="user.get_avatar" class="mb-6 rounded-full" />
+				<img :src="user.get_avatar" class="mb-6 mx-8 rounded-full" />
 				<p>
 					<strong>{{ user.name }}</strong>
 				</p>
@@ -61,20 +61,26 @@
 						<textarea
 							v-model="body"
 							class="p-4 w-full bg-gray-100 rounded-lg"
-							placeholder="你现在正在想什么？"
+							placeholder="What are you thinking"
 						></textarea>
+
+						<div id="preview" v-if="preview">
+							<img :src="preview" class="w-1/2 hover:w-full mt-3 rounded-xl" />
+						</div>
 					</div>
 
 					<div class="p-4 border-t border-gray-100 flex justify-between">
-						<button
-							class="inline-block py-4 px-6 bg-gray-600 text-white rounded-lg"
+						<label
+							class="custom-file-upload inline-block py-4 px-6 bg-gray-600 text-white rounded-lg"
 						>
-							添加图片
-						</button>
+							<input type="file" ref="image" @change="onFileChange" />
+							Attach image
+						</label>
+
 						<button
 							class="inline-block py-4 px-6 bg-purple-600 text-white rounded-lg"
 						>
-							发表
+							Post
 						</button>
 					</div>
 				</form>
@@ -116,6 +122,13 @@ const user = ref({
 	id: '',
 })
 const body = ref('')
+const image = ref(null)
+const preview = ref('')
+
+function onFileChange(e) {
+	let file = e.target.files[0]
+	preview.value = URL.createObjectURL(file)
+}
 
 function sendFriendshipRequest() {
 	axios
@@ -167,16 +180,22 @@ function getFeed() {
 }
 
 function submitForm() {
-	console.log('body :>> ', body.value)
+	// console.log('body :>> ', body.value)
+	let formData = new FormData()
+	formData.append('image', image.value.files[0])
+	formData.append('body', body.value)
 
 	axios
-		.post('/api/posts/create/', {
-			body: body.value,
+		.post('/api/posts/create/', formData, {
+			headers: {
+				'Content-Type': 'multipart/form-data',
+			},
 		})
 		.then((res) => {
 			console.log('user submit post :>> ', res.data)
 			posts.value.unshift(res.data)
 			body.value = ''
+			preview.value = null
 			user.value.posts_count += 1
 		})
 }
@@ -218,3 +237,13 @@ onMounted(() => {
 	getFeed()
 })
 </script>
+
+<style scoped>
+input[type='file'] {
+	display: none;
+}
+
+.custom-file-upload {
+	cursor: pointer;
+}
+</style>

@@ -116,7 +116,11 @@ function submitForm() {
 			.then((res) => {
 				console.log('res :>> ', res.data)
 				if (res.data.message === 'success') {
-					toastStore.showToast(5000, '该用户注册成功，请登录', 'bg-emerald-500')
+					toastStore.showToast(
+						5000,
+						'The user is registered.Please activate your account by clicking your email',
+						'bg-emerald-500'
+					)
 					form.email = ''
 					form.name = ''
 					form.password1 = ''
@@ -127,7 +131,11 @@ function submitForm() {
 						// console.log(key, data[key][0].message)
 						errors.value.push(data[key][0].message)
 					}
-					toastStore.showToast(5000, '出现了一些错误，请重试', 'bg-red-300')
+					toastStore.showToast(
+						5000,
+						'Something went wrong.Please try again',
+						'bg-red-300'
+					)
 				}
 			})
 			.catch((error) => {

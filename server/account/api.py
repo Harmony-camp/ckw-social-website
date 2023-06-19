@@ -1,4 +1,6 @@
 from django.http import JsonResponse
+from django.contrib.auth.forms import PasswordChangeForm
+from django.core.mail import send_mail
 
 from rest_framework.decorators import api_view,authentication_classes,permission_classes
 from rest_framework.response import Response
@@ -36,9 +38,21 @@ def signup(request):
     })
 
     if form.is_valid():
-        form.save()
-      
-      # 发送验证信息至邮箱
+        user = form.save()
+        user.is_active = False
+        user.save()
+        # Send verification email
+
+        url = f"http://127.0.0.1:8000/activateemail/?email={user.email}&id={user.id}"
+
+        send_mail(
+            'Please verify your email',
+            f'The url for activating your account is:{url}',
+            'noreply@ckw.com',
+            [user.email],
+            fail_silently=False,
+        )
+
     else:
         # print(form.errors.as_data())
         # message = list(form.errors)
@@ -91,17 +105,29 @@ def edit_profile(request):
 
         return Response({'message':'information updated','user':serializer.data})
 
+@api_view(['POST'])
+def edit_password(request):
+    user = request.user
+    form = PasswordChangeForm(data=request.POST,user=user)
+
+    if form.is_valid():
+        form.save()
+        return Response({'message':'success'})
+    else:
+
+        return Response({'message':form.errors.as_json()})
+
 
 @api_view(['POST'])
 def send_friendship_request(request,pk):
    # print('send_request',pk)
    user = User.objects.get(pk=pk)
-   print('req ' ,request.user)
-   print('acc? ',user)
+  #  print('req ' ,request.user)
+  #  print('acc? ',user)
    check1 = FriendshipRequest.objects.filter(created_for=request.user).filter(created_for=user)
    check2 = FriendshipRequest.objects.filter(created_for=user).filter(created_for=request.user)
-   print(check1)
-   print(check2)
+  #  print(check1)
+  #  print(check2)
 
    if not check1 or not check2:
       # FriendshipRequest.objects.create(created_for=user,created_by=request.user)

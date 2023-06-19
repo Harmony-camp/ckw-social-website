@@ -80,7 +80,7 @@
 				</div>
 
 				<div class="menu-right">
-					<template v-if="userStore.user.isAuthenticated">
+					<template v-if="userStore.user.isAuthenticated && userStore.user.id">
 						<router-link
 							:to="{ name: 'profile', params: { id: userStore.user.id } }"
 						>

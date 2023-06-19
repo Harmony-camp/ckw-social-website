@@ -8,6 +8,10 @@
 					minima saepe quo dolore quam obcaecati sint voluptatibus, error natus
 					pariatur numquam sapiente consectetur rem velit id, sit vitae aliquid!
 				</p>
+
+				<router-link to="/profile/edit/password" class="underline">
+					Edit password</router-link
+				>
 			</div>
 		</div>
 
