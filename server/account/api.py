@@ -9,6 +9,8 @@ from .models import User,FriendshipRequest
 from .serializers import UserSerializer,FriendshipRequestSerializer
 from .forms import SignupForm,ProfileForm
 
+from notification.utils import create_notification
+
 import json
 
 
@@ -130,7 +132,8 @@ def send_friendship_request(request,pk):
   #  print(check2)
 
    if not check1 or not check2:
-      # FriendshipRequest.objects.create(created_for=user,created_by=request.user)
+      friendrequest = FriendshipRequest.objects.create(created_for=user,created_by=request.user)
+      notification = create_notification(request,'new_friendrequest',friendrequest_id=friendrequest.id)
       return Response('friendship request created')
     
    else:
@@ -154,5 +157,7 @@ def handle_request(request,pk,status):
     request_user = request.user
     request_user.friends_count = request_user.friends_count + 1
     request_user.save()
+
+    notification = create_notification(request,'accepted_friendrequest',friendrequest_id=friendship_request.id)
 
     return Response('friendship request updated')

@@ -4,6 +4,8 @@ from rest_framework.response import Response
 from account.models import User
 from account.serializers import UserSerializer
 
+from notification.utils import create_notification
+
 from .models import Post,Like,Comment,Trend
 from .serializers import PostSerializer,PostDetailSerializer,CommentSerializer,TrendSerializer
 from .forms import PostForm,AttachmentForm
@@ -91,9 +93,11 @@ def post_like(request,pk):
     if not post.likes.filter(created_by=request.user):
          like = Like.objects.create(created_by=request.user)
          post = Post.objects.get(pk=pk)
-         post.like_count = post.likes_count + 1
+         post.likes_count = post.likes_count + 1
          post.likes.add(like)
          post.save()
+
+         notification = create_notification(request,'post_like',post_id=post.id)
 
          return Response('like created')
     else:
@@ -108,6 +112,8 @@ def post_create_comment(request,pk):
     post.comments_count = post.comments_count + 1
     post.comments.add(comment)
     post.save()
+
+    notification = create_notification(request,'post_comment',post_id=post.id)
 
     serializer = CommentSerializer(comment)
 

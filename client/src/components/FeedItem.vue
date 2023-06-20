@@ -29,9 +29,8 @@
 
 	<div class="my-6 flex justify-between">
 		<div class="flex space-x-6">
-			<div class="flex items-center space-x-2">
+			<div class="flex items-center space-x-2" @click="likePost(post.id)">
 				<svg
-					@click="likePost(post.id)"
 					xmlns="http://www.w3.org/2000/svg"
 					fill="none"
 					viewBox="0 0 24 24"
@@ -105,8 +104,8 @@ function likePost(id) {
 	axios
 		.post(`/api/posts/${id}/like/`)
 		.then((res) => {
-			// console.log('res.data :>> ', res.data)
-			// console.log('props :>> ', props.post)
+			console.log('res.data :>> ', res.data)
+			console.log('props :>> ', props.post)
 			if (res.data == 'like created') {
 				props.post.likes_count += 1
 			}
