@@ -29,7 +29,7 @@ trends = []
 this_hour = timezone.now().replace(minute=0,second=0,microsecond=0)
 twenty_four_hours = this_hour - timedelta(hours=24)
 
-posts = Post.objects.filter(created_at__gte=twenty_four_hours)
+posts = Post.objects.filter(created_at__gte=twenty_four_hours).filter(is_private=False)
 # print(posts)
 
 for post in posts:
@@ -40,7 +40,7 @@ for post in posts:
 
 trends_counter = Counter(trends).most_common(10)
 # print(trends_counter)
-
+ 
 for trend in trends_counter:
     # print(trend[0],trend[1])
     Trend.objects.create(hashtag=trend[0],occurences=trend[1])
