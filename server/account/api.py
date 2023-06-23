@@ -83,6 +83,13 @@ def friends(request,pk):
     })
 
 
+@api_view(['GET'])
+def my_friendship_suggestions(request):
+    serializer = UserSerializer(request.user.people_you_may_know.all(),many=True)
+
+    return Response(serializer.data)
+
+
 @api_view(['POST'])
 def edit_profile(request):
     user = request.user
@@ -126,8 +133,8 @@ def send_friendship_request(request,pk):
    user = User.objects.get(pk=pk)
   #  print('req ' ,request.user)
   #  print('acc? ',user)
-   check1 = FriendshipRequest.objects.filter(created_for=request.user).filter(created_for=user)
-   check2 = FriendshipRequest.objects.filter(created_for=user).filter(created_for=request.user)
+   check1 = FriendshipRequest.objects.filter(created_for=request.user).filter(created_by=user)
+   check2 = FriendshipRequest.objects.filter(created_for=user).filter(created_by=request.user)
   #  print(check1)
   #  print(check2)
 

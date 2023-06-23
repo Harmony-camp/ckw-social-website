@@ -1,39 +1,49 @@
 <template>
 	<div class="p-4 bg-white border border-gray-200 rounded-lg">
-		<h3 class="mb-6 text-xl">可能认识的人</h3>
+		<h3 class="mb-6 text-xl">People you may know</h3>
 
 		<div class="space-y-4">
-			<div class="flex items-center justify-between">
+			<div
+				class="flex items-center justify-between"
+				v-for="user in users"
+				:key="user.id"
+			>
 				<div class="flex items-center space-x-2">
-					<img
-						src="https://i.pravatar.cc/300?img=70"
-						class="w-[40px] rounded-full"
-					/>
-					<p class="text-xs"><strong>Capoch</strong></p>
+					<img :src="user.get_avatar" class="w-[40px] rounded-full" />
+					<p class="text-xs">
+						<strong>{{ user.name }}</strong>
+					</p>
 				</div>
 
-				<a
-					href="#"
+				<router-link
+					:to="{ name: 'profile', params: { id: user.id } }"
 					class="py-2 px-3 bg-purple-600 text-white text-xs rounded-lg"
-					>查看</a
-				>
-			</div>
-
-			<div class="flex items-center justify-between">
-				<div class="flex items-center space-x-2">
-					<img
-						src="https://i.pravatar.cc/300?img=70"
-						class="w-[40px] rounded-full"
-					/>
-					<p class="text-xs"><strong>Capoch</strong></p>
-				</div>
-
-				<a
-					href="#"
-					class="py-2 px-3 bg-purple-600 text-white text-xs rounded-lg"
-					>查看</a
+					>Show</router-link
 				>
 			</div>
 		</div>
 	</div>
 </template>
+
+<script setup>
+import axios from 'axios'
+import { ref, onMounted } from 'vue'
+
+const users = ref([])
+
+onMounted(() => {
+	getFriendSuggestions()
+})
+
+function getFriendSuggestions() {
+	axios
+		.get('/api/friends/suggested/')
+		.then((res) => {
+			console.log('suggested :>> ', res.data)
+			users.value = res.data
+		})
+		.catch((error) => {
+			console.log('error :>> ', error)
+		})
+}
+</script>

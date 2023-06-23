@@ -64,6 +64,10 @@
 							placeholder="What are you thinking"
 						></textarea>
 
+						<label>
+							<input type="checkbox" v-model="is_private" /> Private
+						</label>
+
 						<div id="preview" v-if="preview">
 							<img :src="preview" class="w-1/2 hover:w-full mt-3 rounded-xl" />
 						</div>
@@ -124,6 +128,7 @@ const user = ref({
 const body = ref('')
 const image = ref(null)
 const preview = ref('')
+const can_send_friendship_request = ref(null)
 
 function onFileChange(e) {
 	let file = e.target.files[0]
@@ -136,6 +141,7 @@ function sendFriendshipRequest() {
 		.then((res) => {
 			console.log('data :>> ', res.data)
 			// user = response.data.user
+			can_send_friendship_requset.value = false
 
 			if (res.data == 'request already sent') {
 				toastStore.showToast(
@@ -184,6 +190,7 @@ function submitForm() {
 	let formData = new FormData()
 	formData.append('image', image.value.files[0])
 	formData.append('body', body.value)
+	formData.append('is_private', is_private.value)
 
 	axios
 		.post('/api/posts/create/', formData, {
@@ -195,8 +202,12 @@ function submitForm() {
 			console.log('user submit post :>> ', res.data)
 			posts.value.unshift(res.data)
 			body.value = ''
+			is_private.value = false
 			preview.value = null
 			user.value.posts_count += 1
+		})
+		.catch((error) => {
+			console.log('error :>> ', error)
 		})
 }
 
