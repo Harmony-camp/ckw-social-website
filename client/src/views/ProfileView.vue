@@ -56,38 +56,7 @@
 				class="bg-white border border-gray-200 rounded-lg"
 				v-if="userStore.user.id === user.id"
 			>
-				<form @submit.prevent="submitForm" method="post">
-					<div class="p-4">
-						<textarea
-							v-model="body"
-							class="p-4 w-full bg-gray-100 rounded-lg"
-							placeholder="What are you thinking"
-						></textarea>
-
-						<label>
-							<input type="checkbox" v-model="is_private" /> Private
-						</label>
-
-						<div id="preview" v-if="preview">
-							<img :src="preview" class="w-1/2 hover:w-full mt-3 rounded-xl" />
-						</div>
-					</div>
-
-					<div class="p-4 border-t border-gray-100 flex justify-between">
-						<label
-							class="custom-file-upload inline-block py-4 px-6 bg-gray-600 text-white rounded-lg"
-						>
-							<input type="file" ref="image" @change="onFileChange" />
-							Attach image
-						</label>
-
-						<button
-							class="inline-block py-4 px-6 bg-purple-600 text-white rounded-lg"
-						>
-							Post
-						</button>
-					</div>
-				</form>
+				<FeedForm :user="user" :posts="posts" />
 			</div>
 
 			<div
@@ -110,6 +79,7 @@
 import PeopleYouMayKnow from '../components/PeopleYouMayKnow.vue'
 import Trends from '../components/Trends.vue'
 import FeedItem from '../components/FeedItem.vue'
+import FeedForm from '../components/FeedForm.vue'
 import { useUserStore } from '@/stores/user'
 import { useToastStore } from '@/stores/toast'
 import { useRoute, useRouter } from 'vue-router'
@@ -126,9 +96,10 @@ const user = ref({
 	id: '',
 })
 const body = ref('')
-const image = ref(null)
+
 const preview = ref('')
 const can_send_friendship_request = ref(null)
+const is_private = ref(false)
 
 function onFileChange(e) {
 	let file = e.target.files[0]
@@ -248,13 +219,3 @@ onMounted(() => {
 	getFeed()
 })
 </script>
-
-<style scoped>
-input[type='file'] {
-	display: none;
-}
-
-.custom-file-upload {
-	cursor: pointer;
-}
-</style>
