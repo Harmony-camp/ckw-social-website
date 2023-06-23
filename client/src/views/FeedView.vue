@@ -10,7 +10,7 @@
 				v-for="post in posts"
 				:key="post.id"
 			>
-				<FeedItem :post="post" />
+				<FeedItem :post="post" @deletePost="deletePost" />
 			</div>
 		</div>
 
@@ -42,6 +42,12 @@ function getFeed() {
 		.catch((error) => {
 			console.log('error :>> ', error)
 		})
+}
+
+function deletePost(id) {
+	// console.log('deletepost in profile id :>> ', id)
+
+	posts.value = posts.value.filter((post) => post.id !== id)
 }
 
 // function submitForm() {

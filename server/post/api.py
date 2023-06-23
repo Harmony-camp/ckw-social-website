@@ -113,6 +113,13 @@ def post_create(request):
     else:
         return Response('Error occurred!Add something here later!...')
 
+@api_view(['DELETE'])
+def post_delete(request,pk):
+    post = Post.objects.filter(created_by=request.user).get(pk=pk)
+    post.delete()
+
+    return Response({'message':'post deleted'})
+
 @api_view(['POST'])
 def post_like(request,pk):
     post = Post.objects.get(pk=pk)
