@@ -134,7 +134,7 @@
 				</svg>
 				<span class="text-red-500 text-xs">delete post</span>
 			</div>
-			<div class="flex items-center space-x-2">
+			<div class="flex items-center space-x-2" @click="reportPost">
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					fill="none"
@@ -158,10 +158,12 @@
 
 <script setup>
 import axios from 'axios'
+import { useToastStore } from '@/stores/toast'
 import { useUserStore } from '@/stores/user'
 import { ref } from 'vue'
 
 const userStore = useUserStore()
+const toastStore = useToastStore()
 
 const emit = defineEmits(['deletePost'])
 const props = defineProps({
@@ -192,6 +194,17 @@ function toggleExtraModel() {
 	showExtraModal.value = !showExtraModal.value
 }
 
+function reportPost() {
+	axios
+		.post(`/api/posts/${props.post.id}/report/`)
+		.then((res) => {
+			toastStore.showToast(5000, 'The post was reported', 'bg-emerald-500')
+		})
+		.catch((error) => {
+			console.log('error :>> ', error)
+		})
+}
+
 function deletePost() {
 	// console.log('deletepost', props.post.id)
 
@@ -200,6 +213,7 @@ function deletePost() {
 		.delete(`/api/posts/${props.post.id}/delete/`)
 		.then((res) => {
 			console.log('delete msg :>> ', res.data.message)
+			toastStore.showToast(5000, 'The post was deleted', 'bg-red-500')
 		})
 		.catch((error) => {
 			console.log('error :>> ', error)

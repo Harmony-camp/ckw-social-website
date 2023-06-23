@@ -121,6 +121,14 @@ def post_delete(request,pk):
     return Response({'message':'post deleted'})
 
 @api_view(['POST'])
+def post_report(request,pk):
+    post = Post.objects.get(pk=pk)
+    post.reported_by_users.add(request.user)
+    post.save()
+
+    return Response({'message':'post reported'})
+
+@api_view(['POST'])
 def post_like(request,pk):
     post = Post.objects.get(pk=pk)
 
