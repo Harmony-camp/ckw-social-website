@@ -20,7 +20,7 @@ const router = createRouter({
 		{
 			path: '/',
 			name: 'home',
-			component: HomeView,
+			component: FeedView,
 		},
 		{
 			path: '/feed',
@@ -51,7 +51,6 @@ const router = createRouter({
 			path: '/profile/:id',
 			name: 'profile',
 			component: ProfileView,
-			// props: (route) => ({ id: route.params.id }),
 		},
 		{
 			path: '/profile/edit',
@@ -87,11 +86,6 @@ const router = createRouter({
 			path: '/login',
 			name: 'login',
 			component: LoginView,
-		},
-		{
-			path: '/about',
-			name: 'about',
-			component: () => import('../views/AboutView.vue'),
 		},
 	],
 })

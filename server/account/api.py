@@ -132,16 +132,17 @@ def edit_password(request):
 def send_friendship_request(request,pk):
    # print('send_request',pk)
    user = User.objects.get(pk=pk)
-  #  print('req ' ,request.user)
+   # 发出好友请求的用户
+  #  print('req?' ,request.user)
+   # 收到请求的用户 可能是自身、可能是另一个
   #  print('acc? ',user)
-   check1 = FriendshipRequest.objects.filter(created_for=request.user).filter(created_by=user)
-   check2 = FriendshipRequest.objects.filter(created_for=user).filter(created_by=request.user)
-  #  print(check1)
-  #  print(check2)
+  #  check1 = FriendshipRequest.objects.filter(created_for=request.user).filter(created_by=user)
+  #  print('check2-------------')
+   check = FriendshipRequest.objects.filter(created_for=user).filter(created_by=request.user)
 
-   if not check1 or not check2:
-      friendrequest = FriendshipRequest.objects.create(created_for=user,created_by=request.user)
-      notification = create_notification(request,'new_friendrequest',friendrequest_id=friendrequest.id)
+   if not check:
+      # friendrequest = FriendshipRequest.objects.create(created_for=user,created_by=request.user)
+      # notification = create_notification(request,'new_friendrequest',friendrequest_id=friendrequest.id)
       return Response('friendship request created')
     
    else:

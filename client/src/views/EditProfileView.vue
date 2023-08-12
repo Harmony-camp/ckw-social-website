@@ -29,7 +29,7 @@
 							/>
 							<img
 								@click="openFilePicker"
-								class="rounded-full w-24 h-24"
+								class="rounded-full w-24"
 								ref="pressImg"
 								:src="avatarUrl"
 							/>

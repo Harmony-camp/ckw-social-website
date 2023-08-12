@@ -2,7 +2,7 @@
 	<div class="max-w-7xl mx-auto grid grid-cols-4 gap-4">
 		<div class="main-left col-span-1">
 			<div class="p-4 bg-white border border-gray-200 text-center rounded-lg">
-				<img :src="user.get_avatar" class="mb-6 mx-8 rounded-full" />
+				<img :src="user.get_avatar" class="w-36 mb-6 mx-auto rounded-full" />
 				<p>
 					<strong>{{ user.name }}</strong>
 				</p>
@@ -95,24 +95,15 @@ const posts = ref([])
 const user = ref({
 	id: '',
 })
-const body = ref('')
 
-const preview = ref('')
-const can_send_friendship_request = ref(null)
-const is_private = ref(false)
-
-function onFileChange(e) {
-	let file = e.target.files[0]
-	preview.value = URL.createObjectURL(file)
-}
-
+let can_send_friendship_request = ref(null)
 function sendFriendshipRequest() {
 	axios
 		.post(`/api/friends/${route.params.id}/request/`)
 		.then((res) => {
 			console.log('data :>> ', res.data)
 			// user = response.data.user
-			can_send_friendship_requset.value = false
+			can_send_friendship_request.value = false
 
 			if (res.data == 'request already sent') {
 				toastStore.showToast(
@@ -150,32 +141,7 @@ function getFeed() {
 			console.log('posts :>> ', res.data)
 			posts.value = res.data.posts
 			user.value = res.data.user
-		})
-		.catch((error) => {
-			console.log('error :>> ', error)
-		})
-}
-
-function submitForm() {
-	// console.log('body :>> ', body.value)
-	let formData = new FormData()
-	formData.append('image', image.value.files[0])
-	formData.append('body', body.value)
-	formData.append('is_private', is_private.value)
-
-	axios
-		.post('/api/posts/create/', formData, {
-			headers: {
-				'Content-Type': 'multipart/form-data',
-			},
-		})
-		.then((res) => {
-			console.log('user submit post :>> ', res.data)
-			posts.value.unshift(res.data)
-			body.value = ''
-			is_private.value = false
-			preview.value = null
-			user.value.posts_count += 1
+			can_send_friendship_request.value = res.data.can_send_friendship_request
 		})
 		.catch((error) => {
 			console.log('error :>> ', error)

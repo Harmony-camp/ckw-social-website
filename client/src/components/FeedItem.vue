@@ -13,7 +13,7 @@
 			</p>
 		</div>
 
-		<p class="text-gray-600">{{ post.created_at_formatted }} ago</p>
+		<p class="text-gray-600">{{ post.created_at_formatted }}</p>
 	</div>
 
 	<template v-if="post.attachments.length">

@@ -22,12 +22,13 @@ def post_list(request):
 
     posts = Post.objects.filter(created_by_id__in=list(user_ids))
 
+    all_posts = Post.objects.all()
     trend = request.GET.get('trend','')
 
     if trend:
-      #  posts = posts.filter(body__icontains=trend)
-      posts = posts.filter(body__icontains='#'+trend).filter(is_private=False)
-
+      #  posts = all_posts.filter(body__icontains=trend)
+      posts = all_posts.filter(body__icontains='#'+trend).filter(is_private=False)
+      
     serializer = PostSerializer(posts,many=True)
 
     return Response(serializer.data)
@@ -69,10 +70,10 @@ def post_list_profile(request,id):
     if request.user in user.friends.all():
         can_send_friendship_request = False
 
-    check1 = FriendshipRequest.objects.filter(created_for=request.user).filter(created_by=user)
-    check2 = FriendshipRequest.objects.filter(created_for=user).filter(created_by=request.user)
+    # check1 = FriendshipRequest.objects.filter(created_for=request.user).filter(created_by=user)
+    check = FriendshipRequest.objects.filter(created_for=user).filter(created_by=request.user)
 
-    if check1 or check2:
+    if check:
         can_send_friendship_request = False
 
     return Response({

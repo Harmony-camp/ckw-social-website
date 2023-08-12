@@ -10,7 +10,12 @@
 					class="menu-center flex space-x-12"
 					v-if="userStore.user.isAuthenticated"
 				>
-					<router-link to="/feed" class="text-purple-700">
+					<!-- <a
+						href="#"
+						class="hover:bg-blue-400 group flex items-center rounded-md bg-blue-500 text-white text-sm font-medium pl-2 pr-3 py-2 shadow-sm"
+						>button</a
+					> -->
+					<router-link to="/feed" class="hover:text-purple-700">
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
 							fill="none"
@@ -27,7 +32,7 @@
 						</svg>
 					</router-link>
 
-					<router-link to="/chat">
+					<router-link to="/chat" class="hover:text-purple-700">
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
 							fill="none"
@@ -44,7 +49,7 @@
 						</svg>
 					</router-link>
 
-					<router-link to="/notifications">
+					<router-link to="/notifications" class="hover:text-purple-700">
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
 							fill="none"
@@ -61,7 +66,7 @@
 						</svg>
 					</router-link>
 
-					<router-link to="/search">
+					<router-link to="/search" class="hover:text-purple-700">
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
 							fill="none"
