@@ -22,7 +22,7 @@
 						<textarea
 							v-model="body"
 							class="p-4 w-full bg-gray-100 rounded-lg"
-							placeholder="What do you think?"
+							placeholder="发布你的评论！"
 						></textarea>
 					</div>
 
@@ -30,7 +30,7 @@
 						<button
 							class="inline-block py-4 px-6 bg-purple-600 text-white rounded-lg"
 						>
-							Comment
+							评论
 						</button>
 					</div>
 				</form>

@@ -8,11 +8,9 @@
 				</p>
 				<div class="mt-6 flex space-x-8 justify-around" v-if="user.id">
 					<router-link :to="{ name: 'friends', params: { id: user.id } }">
-						<p class="text-xs text-gray-500">
-							{{ user.friends_count }} friends
-						</p>
+						<p class="text-xs text-gray-500">{{ user.friends_count }} 好友</p>
 					</router-link>
-					<p class="text-xs text-gray-500">{{ user.posts_count }} posts</p>
+					<p class="text-xs text-gray-500">{{ user.posts_count }} 推文</p>
 				</div>
 
 				<div class="mt-6">
@@ -21,7 +19,7 @@
 						@click="sendFriendshipRequest"
 						class="inline-block py-3 px-6 bg-purple-600 text-xs text-white rounded-lg"
 					>
-						Send friendship request
+						添加好友
 					</button>
 
 					<button
@@ -29,7 +27,7 @@
 						@click="sendDirectMessage"
 						class="inline-block mt-4 py-3 px-6 bg-purple-600 text-xs text-white rounded-lg"
 					>
-						Send direct message
+						发送消息
 					</button>
 
 					<router-link
@@ -37,7 +35,7 @@
 						to="/profile/edit"
 						class="inline-block py-3 px-6 bg-purple-600 text-xs text-white rounded-lg"
 					>
-						Edit Profile
+						编辑个人资料
 					</router-link>
 
 					<button
@@ -45,7 +43,7 @@
 						@click="logout"
 						class="ml-2 inline-block py-3 px-6 bg-red-600 text-xs text-white rounded-lg"
 					>
-						Log out
+						退出登录
 					</button>
 				</div>
 			</div>
@@ -106,13 +104,9 @@ function sendFriendshipRequest() {
 			can_send_friendship_request.value = false
 
 			if (res.data == 'request already sent') {
-				toastStore.showToast(
-					5000,
-					'The request has already been sent!',
-					'bg-red-300'
-				)
+				toastStore.showToast(5000, '好友请求已经发送过了！', 'bg-red-300')
 			} else {
-				toastStore.showToast(5000, 'The request was sent!', 'bg-emerald-300')
+				toastStore.showToast(5000, '好友请求已发送!', 'bg-emerald-300')
 			}
 		})
 		.catch((error) => {

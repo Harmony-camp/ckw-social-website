@@ -7,7 +7,7 @@
 						v-model="query"
 						type="search"
 						class="p-4 w-full bg-gray-100 rounded-lg"
-						placeholder="What are you want to search?"
+						placeholder="搜索您感兴趣的内容..."
 					/>
 
 					<button
@@ -51,10 +51,8 @@
 					</p>
 
 					<div class="mt-6 flex space-x-8 justify-around">
-						<p class="text-xs text-gray-500">
-							{{ user.friends_count }} friends
-						</p>
-						<p class="text-xs text-gray-500">{{ user.posts_count }} posts</p>
+						<p class="text-xs text-gray-500">{{ user.friends_count }} 好友</p>
+						<p class="text-xs text-gray-500">{{ user.posts_count }} 推文</p>
 					</div>
 				</div>
 			</div>

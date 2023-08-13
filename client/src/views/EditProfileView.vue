@@ -2,7 +2,7 @@
 	<div class="max-w-7xl mx-auto grid grid-cols-2 gap-4">
 		<div class="main-left">
 			<div class="p-12 bg-white border border-gray-200 rounded-lg">
-				<h1 class="mb-6 text-2xl">Edit profile</h1>
+				<h1 class="mb-6 text-2xl">编辑个人资料</h1>
 				<p class="mb-6 text-gray-500">
 					Lorem ipsum, dolor sit amet consectetur adipisicing elit. Harum at
 					minima saepe quo dolore quam obcaecati sint voluptatibus, error natus
@@ -10,7 +10,7 @@
 				</p>
 
 				<router-link to="/profile/edit/password" class="underline">
-					Edit password</router-link
+					修改密码</router-link
 				>
 			</div>
 		</div>
@@ -19,7 +19,7 @@
 			<div class="p-12 bg-white border border-gray-200 rounded-lg">
 				<form class="space-y-6" @submit.prevent="submitForm">
 					<div>
-						<label>Avatar</label><br />
+						<!-- <label>头像</label><br /> -->
 						<div class="uploadArea space-y-5">
 							<input
 								ref="fileInputRef"
@@ -36,7 +36,7 @@
 						</div>
 					</div>
 					<div>
-						<label>Name</label><br />
+						<label>昵称</label><br />
 						<input
 							type="text"
 							placeholder="请输入昵称"
@@ -62,7 +62,7 @@
 
 					<div>
 						<button class="py-4 px-6 bg-purple-600 text-white rounded-lg">
-							Save changes
+							保存更改
 						</button>
 					</div>
 				</form>

@@ -4,10 +4,10 @@
 			<textarea
 				v-model="body"
 				class="p-4 w-full bg-gray-100 rounded-lg"
-				placeholder="What are you thinking?"
+				placeholder="有什么新鲜事?！"
 			></textarea>
 
-			<label> <input type="checkbox" v-model="is_private" /> Private </label>
+			<label> <input type="checkbox" v-model="is_private" /> 仅好友可见 </label>
 
 			<div id="preview" v-if="preview">
 				<img :src="preview" class="w-1/2 hover:w-full mt-3 rounded-xl" />
@@ -19,13 +19,13 @@
 				class="custom-file-upload inline-block py-4 px-6 bg-gray-600 text-white rounded-lg"
 			>
 				<input type="file" ref="image" @change="onFileChange" />
-				Attach image
+				添加图片
 			</label>
 
 			<button
 				class="inline-block py-4 px-6 bg-purple-600 text-white rounded-lg"
 			>
-				Post
+				发帖
 			</button>
 		</div>
 	</form>

@@ -13,7 +13,7 @@
 			</p>
 		</div>
 
-		<p class="text-gray-600">{{ comment.created_at_formatted }} ago</p>
+		<p class="text-gray-600">{{ comment.created_at_formatted }}</p>
 	</div>
 
 	<p>{{ comment.body }}</p>

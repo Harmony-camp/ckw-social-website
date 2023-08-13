@@ -43,7 +43,7 @@ class Comment(models.Model):
         ordering = ('created_at',)
 
     def created_at_formatted(self):
-        return timesince(self.created_at)
+        return timesince_chinese(self.created_at)
 
 class PostAttachment(models.Model):
      id = models.UUIDField(primary_key=True,default=uuid.uuid4,editable=False)

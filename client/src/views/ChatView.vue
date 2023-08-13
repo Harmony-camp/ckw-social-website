@@ -25,9 +25,9 @@
 							</template>
 						</div>
 
-						<span class="text-xs text-gray-500"
-							>{{ conversation.modified_at_formatted }} ago</span
-						>
+						<span class="text-xs text-gray-500">{{
+							conversation.modified_at_formatted
+						}}</span>
 					</div>
 				</div>
 			</div>
@@ -52,9 +52,9 @@
 										{{ message.body }}
 									</p>
 								</div>
-								<span class="text-xs text-gray-500 leading-none"
-									>{{ message.created_at_formatted }} ago</span
-								>
+								<span class="text-xs text-gray-500 leading-none">{{
+									message.created_at_formatted
+								}}</span>
 							</div>
 							<div class="flex-shrink-0 h-10 w-10 rounded-full bg-gray-300">
 								<img
@@ -78,9 +78,9 @@
 										{{ message.body }}
 									</p>
 								</div>
-								<span class="text-xs text-gray-500 leading-none"
-									>{{ message.created_at_formatted }} ago</span
-								>
+								<span class="text-xs text-gray-500 leading-none">{{
+									message.created_at_formatted
+								}}</span>
 							</div>
 						</div>
 					</template>
@@ -93,7 +93,7 @@
 						<textarea
 							v-model="body"
 							class="p-4 w-full bg-gray-100 rounded-lg"
-							placeholder="What do you want to say?"
+							placeholder="请输入你想说的话..."
 						></textarea>
 					</div>
 
@@ -101,7 +101,7 @@
 						<button
 							class="inline-block py-4 px-6 bg-purple-600 text-white rounded-lg"
 						>
-							Send
+							发送
 						</button>
 					</div>
 				</form>

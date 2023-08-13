@@ -10,11 +10,13 @@
 				{{ notification.body }}
 
 				<button class="underline" @click="readNotification(notification)">
-					Read more
+					<!-- Read more -->
+					查看更多
 				</button>
 			</div>
 			<div v-else class="p-4 bg-white border border-gray-200 rounded-lg">
-				You don't have any unread notifications!
+				<!-- You don't have any unread notifications! -->
+				您没有任何未读的通知！
 			</div>
 		</div>
 	</div>
