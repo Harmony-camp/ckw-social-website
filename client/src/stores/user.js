@@ -11,7 +11,7 @@ export const useUserStore = defineStore({
 			name: null,
 			email: null,
 			access: null,
-			reflesh: null,
+			refresh: null,
 			avatar: null,
 		},
 	}),
@@ -40,7 +40,7 @@ export const useUserStore = defineStore({
 			console.log('setToken', data)
 
 			this.user.access = data.access
-			this.user.reflesh = data.reflesh
+			this.user.refresh = data.refresh
 			this.user.isAuthenticated = true
 
 			localStorage.setItem('user.access', data.access)
@@ -52,7 +52,7 @@ export const useUserStore = defineStore({
 		removeToken() {
 			console.log('removeToken')
 
-			this.user.reflesh = null
+			this.user.refresh = null
 			this.user.access = null
 			this.isAuthenticated = false
 			this.user.id = null

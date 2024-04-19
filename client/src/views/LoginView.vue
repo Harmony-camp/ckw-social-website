@@ -92,7 +92,8 @@ async function submitForm() {
 			.catch((error) => {
 				console.log('error :>> ', error)
 				errors.value.push(
-					'The email or password is in correct!Or the user is not activated'
+					// 'The email or password is in correct!Or the user is not activated'
+					'邮箱或密码不正确！或该用户未被激活'
 				)
 			})
 	}
